@@ -9,18 +9,18 @@ class Clickgauge_Search_Console {
     const SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly';
 
     public static function redirect_uri() {
-        return admin_url('admin-post.php?action=wp_clickgauge_oauth_callback');
+        return admin_url('admin-post.php?action=clickguage_oauth_callback');
     }
 
     public static function is_connected() {
-        $token = get_option('wp_clickgauge_google_token', array());
+        $token = get_option('clickguage_google_token', array());
         return is_array($token) && !empty($token['refresh_token']);
     }
 
     public static function auth_url() {
         $settings = Clickgauge_Admin::settings();
         $state = wp_generate_password(24, false);
-        set_transient('wp_clickgauge_oauth_state', $state, 10 * MINUTE_IN_SECONDS);
+        set_transient('clickguage_oauth_state', $state, 10 * MINUTE_IN_SECONDS);
         $query = array(
             'client_id' => $settings['google_client_id'],
             'redirect_uri' => self::redirect_uri(),
@@ -49,9 +49,9 @@ class Clickgauge_Search_Console {
     }
 
     public static function access_token() {
-        $token = get_option('wp_clickgauge_google_token', array());
+        $token = get_option('clickguage_google_token', array());
         if (!is_array($token) || empty($token['refresh_token'])) {
-            return new WP_Error('wp_clickgauge_gsc', __('Google Search Console is not connected.', 'wp-clickgauge'));
+            return new WP_Error('clickguage_gsc', __('Google Search Console is not connected.', 'clickguage'));
         }
         if (!empty($token['access_token']) && !empty($token['expires_at']) && time() < ((int) $token['expires_at'] - 60)) {
             return $token['access_token'];
@@ -70,14 +70,14 @@ class Clickgauge_Search_Console {
         if (is_wp_error($stored)) {
             return $stored;
         }
-        $fresh = get_option('wp_clickgauge_google_token', array());
+        $fresh = get_option('clickguage_google_token', array());
         return $fresh['access_token'];
     }
 
     public static function query($body) {
         $settings = Clickgauge_Admin::settings();
         if ($settings['gsc_property'] === '') {
-            return new WP_Error('wp_clickgauge_gsc', __('Enter the Search Console property before scanning.', 'wp-clickgauge'));
+            return new WP_Error('clickguage_gsc', __('Enter the Search Console property before scanning.', 'clickguage'));
         }
         $access = self::access_token();
         if (is_wp_error($access)) {
@@ -98,8 +98,8 @@ class Clickgauge_Search_Console {
         $code = wp_remote_retrieve_response_code($response);
         $data = json_decode(wp_remote_retrieve_body($response), true);
         if ($code < 200 || $code >= 300) {
-            $message = isset($data['error']['message']) ? $data['error']['message'] : __('Search Console request failed.', 'wp-clickgauge');
-            return new WP_Error('wp_clickgauge_gsc', $message);
+            $message = isset($data['error']['message']) ? $data['error']['message'] : __('Search Console request failed.', 'clickguage');
+            return new WP_Error('clickguage_gsc', $message);
         }
         return isset($data['rows']) && is_array($data['rows']) ? $data['rows'] : array();
     }
@@ -184,11 +184,11 @@ class Clickgauge_Search_Console {
         $code = wp_remote_retrieve_response_code($response);
         $data = json_decode(wp_remote_retrieve_body($response), true);
         if ($code < 200 || $code >= 300 || empty($data['access_token'])) {
-            $message = isset($data['error_description']) ? $data['error_description'] : __('Google did not return an access token.', 'wp-clickgauge');
-            return new WP_Error('wp_clickgauge_gsc', $message);
+            $message = isset($data['error_description']) ? $data['error_description'] : __('Google did not return an access token.', 'clickguage');
+            return new WP_Error('clickguage_gsc', $message);
         }
         $refresh = !empty($data['refresh_token']) ? $data['refresh_token'] : $existing_refresh;
-        update_option('wp_clickgauge_google_token', array(
+        update_option('clickguage_google_token', array(
             'access_token' => $data['access_token'],
             'refresh_token' => $refresh,
             'expires_at' => time() + (isset($data['expires_in']) ? (int) $data['expires_in'] : 3600),

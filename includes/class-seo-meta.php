@@ -29,7 +29,7 @@ class Clickgauge_Seo_Meta {
             $provider = 'aioseo';
             return $provider;
         }
-        $provider = 'wp-clickgauge';
+        $provider = 'clickguage';
         return $provider;
     }
 
@@ -39,7 +39,7 @@ class Clickgauge_Seo_Meta {
             'rank_math' => 'Rank Math',
             'seopress' => 'SEOPress',
             'aioseo' => 'All in One SEO',
-            'wp-clickgauge' => __('Clickgauge (no SEO plugin detected)', 'wp-clickgauge'),
+            'clickguage' => __('Clickgauge (no SEO plugin detected)', 'clickguage'),
         );
         $provider = self::provider();
         return isset($labels[$provider]) ? $labels[$provider] : $provider;
@@ -69,8 +69,8 @@ class Clickgauge_Seo_Meta {
             return self::read_aioseo($post_id);
         }
         return array(
-            'title' => (string) get_post_meta($post_id, '_wp_clickgauge_title', true),
-            'description' => (string) get_post_meta($post_id, '_wp_clickgauge_description', true),
+            'title' => (string) get_post_meta($post_id, '_clickguage_title', true),
+            'description' => (string) get_post_meta($post_id, '_clickguage_description', true),
         );
     }
 
@@ -95,15 +95,15 @@ class Clickgauge_Seo_Meta {
             self::write_aioseo($post_id, $title, $description);
             return;
         }
-        update_post_meta($post_id, '_wp_clickgauge_title', $title);
-        update_post_meta($post_id, '_wp_clickgauge_description', $description);
+        update_post_meta($post_id, '_clickguage_title', $title);
+        update_post_meta($post_id, '_clickguage_description', $description);
     }
 
     public static function filter_document_title($parts) {
-        if (self::provider() !== 'wp-clickgauge' || !is_singular()) {
+        if (self::provider() !== 'clickguage' || !is_singular()) {
             return $parts;
         }
-        $title = get_post_meta(get_queried_object_id(), '_wp_clickgauge_title', true);
+        $title = get_post_meta(get_queried_object_id(), '_clickguage_title', true);
         if (is_string($title) && $title !== '') {
             $parts['title'] = $title;
         }
@@ -111,10 +111,10 @@ class Clickgauge_Seo_Meta {
     }
 
     public static function print_description() {
-        if (self::provider() !== 'wp-clickgauge' || !is_singular()) {
+        if (self::provider() !== 'clickguage' || !is_singular()) {
             return;
         }
-        $description = get_post_meta(get_queried_object_id(), '_wp_clickgauge_description', true);
+        $description = get_post_meta(get_queried_object_id(), '_clickguage_description', true);
         if (!is_string($description) || $description === '') {
             return;
         }

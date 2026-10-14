@@ -8,7 +8,7 @@ class Clickgauge_Experiments {
 
     public static function table() {
         global $wpdb;
-        return $wpdb->prefix . 'wp_clickgauge_experiments';
+        return $wpdb->prefix . 'clickguage_experiments';
     }
 
     public static function scan() {
@@ -55,7 +55,7 @@ class Clickgauge_Experiments {
                 break;
             }
         }
-        set_transient('wp_clickgauge_opportunities', $found, 12 * HOUR_IN_SECONDS);
+        set_transient('clickguage_opportunities', $found, 12 * HOUR_IN_SECONDS);
 
         if (!empty($settings['auto_apply'])) {
             $limit = max(1, (int) $settings['auto_limit']);
@@ -82,10 +82,10 @@ class Clickgauge_Experiments {
         Clickgauge_Runtime::watch('draft');
         $post = get_post($post_id);
         if (!$post || $post->post_status !== 'publish') {
-            return new WP_Error('wp_clickgauge_post', __('That page is not a published post.', 'wp-clickgauge'));
+            return new WP_Error('clickguage_post', __('That page is not a published post.', 'clickguage'));
         }
         if (self::applied_for_post($post_id)) {
-            return new WP_Error('wp_clickgauge_post', __('This page already has an active snippet test.', 'wp-clickgauge'));
+            return new WP_Error('clickguage_post', __('This page already has an active snippet test.', 'clickguage'));
         }
         if ($metrics === null) {
             $metrics = Clickgauge_Search_Console::page_metrics($url);
@@ -127,7 +127,7 @@ class Clickgauge_Experiments {
     public static function apply($experiment_id) {
         $row = self::get($experiment_id);
         if (!$row || $row->status !== 'pending') {
-            return new WP_Error('wp_clickgauge_apply', __('That draft is no longer waiting for approval.', 'wp-clickgauge'));
+            return new WP_Error('clickguage_apply', __('That draft is no longer waiting for approval.', 'clickguage'));
         }
         Clickgauge_Seo_Meta::write((int) $row->post_id, $row->new_title, $row->new_description);
         global $wpdb;
@@ -148,7 +148,7 @@ class Clickgauge_Experiments {
     public static function rollback($experiment_id) {
         $row = self::get($experiment_id);
         if (!$row || $row->status !== 'applied') {
-            return new WP_Error('wp_clickgauge_rollback', __('That change is not active.', 'wp-clickgauge'));
+            return new WP_Error('clickguage_rollback', __('That change is not active.', 'clickguage'));
         }
         Clickgauge_Seo_Meta::write((int) $row->post_id, $row->old_title, $row->old_description);
         global $wpdb;

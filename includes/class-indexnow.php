@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 class Clickgauge_IndexNow {
 
     public static function maybe_serve_key() {
-        $key = get_option('wp_clickgauge_indexnow_key');
+        $key = get_option('clickguage_indexnow_key');
         if (!is_string($key) || $key === '') {
             return;
         }
@@ -24,7 +24,7 @@ class Clickgauge_IndexNow {
     }
 
     public static function ping($url) {
-        $key = get_option('wp_clickgauge_indexnow_key');
+        $key = get_option('clickguage_indexnow_key');
         if (!is_string($key) || $key === '' || $url === '') {
             return;
         }

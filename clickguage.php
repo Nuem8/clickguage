@@ -8,7 +8,7 @@
  * Plugin URI: https://nuem8.com
  * Requires at least: 6.0
  * Requires PHP: 7.4
- * Text Domain: wp-clickgauge
+ * Text Domain: clickguage
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
@@ -35,6 +35,6 @@ register_deactivation_hook(CLICKGAUGE_FILE, array('Clickgauge_Activator', 'deact
 
 add_action('plugins_loaded', array('Clickgauge_Admin', 'init'));
 add_action('init', array('Clickgauge_IndexNow', 'maybe_serve_key'), 0);
-add_action('wp_clickgauge_recheck', array('Clickgauge_Experiments', 'recheck_due'));
+add_action('clickguage_recheck', array('Clickgauge_Experiments', 'recheck_due'));
 add_filter('document_title_parts', array('Clickgauge_Seo_Meta', 'filter_document_title'));
 add_action('wp_head', array('Clickgauge_Seo_Meta', 'print_description'), 1);

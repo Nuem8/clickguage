@@ -6,12 +6,12 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 
 global $wpdb;
 
-wp_clear_scheduled_hook('wp_clickgauge_recheck');
-delete_option('wp_clickgauge_settings');
-delete_option('wp_clickgauge_google_token');
-delete_option('wp_clickgauge_indexnow_key');
-delete_transient('wp_clickgauge_opportunities');
-delete_transient('wp_clickgauge_oauth_state');
+wp_clear_scheduled_hook('clickguage_recheck');
+delete_option('clickguage_settings');
+delete_option('clickguage_google_token');
+delete_option('clickguage_indexnow_key');
+delete_transient('clickguage_opportunities');
+delete_transient('clickguage_oauth_state');
 
-$table = $wpdb->prefix . 'wp_clickgauge_experiments';
+$table = $wpdb->prefix . 'clickguage_experiments';
 $wpdb->query("DROP TABLE IF EXISTS {$table}");

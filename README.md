@@ -18,7 +18,7 @@ Clickgauge is published by [NueM8](https://nuem8.com).
 
 ## Installation
 
-1. Copy the `wp-clickgauge` folder into `wp-content/plugins/`.
+1. Copy the `clickguage` folder into `wp-content/plugins/`.
 2. Activate Clickgauge.
 3. In Google Cloud, create an OAuth client with the Search Console read-only scope and add the redirect URI shown on the settings screen.
 4. Add an OpenAI-compatible API key, connect Search Console, and run Find opportunities.

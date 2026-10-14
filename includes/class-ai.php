@@ -9,7 +9,7 @@ class Clickgauge_Ai {
     public static function draft($post, $queries, $current_title, $current_description) {
         $settings = Clickgauge_Admin::settings();
         if ($settings['ai_api_key'] === '') {
-            return new WP_Error('wp_clickgauge_ai', __('Add an AI API key in Clickgauge settings.', 'wp-clickgauge'));
+            return new WP_Error('clickguage_ai', __('Add an AI API key in Clickgauge settings.', 'clickguage'));
         }
         $excerpt = wp_strip_all_tags($post->post_excerpt !== '' ? $post->post_excerpt : $post->post_content);
         $excerpt = trim(preg_replace('/\s+/', ' ', $excerpt));
@@ -49,8 +49,8 @@ class Clickgauge_Ai {
         $code = wp_remote_retrieve_response_code($response);
         $data = json_decode(wp_remote_retrieve_body($response), true);
         if ($code < 200 || $code >= 300) {
-            $message = isset($data['error']['message']) ? $data['error']['message'] : __('The AI request failed.', 'wp-clickgauge');
-            return new WP_Error('wp_clickgauge_ai', $message);
+            $message = isset($data['error']['message']) ? $data['error']['message'] : __('The AI request failed.', 'clickguage');
+            return new WP_Error('clickguage_ai', $message);
         }
         $content = '';
         if (isset($data['choices'][0]['message']['content'])) {
@@ -60,7 +60,7 @@ class Clickgauge_Ai {
         $content = preg_replace('/^```(?:json)?|```$/m', '', $content);
         $parsed = json_decode(trim($content), true);
         if (!is_array($parsed) || empty($parsed['title']) || empty($parsed['description'])) {
-            return new WP_Error('wp_clickgauge_ai', __('The AI response was not a title and description.', 'wp-clickgauge'));
+            return new WP_Error('clickguage_ai', __('The AI response was not a title and description.', 'clickguage'));
         }
         return array(
             'title' => self::clip(wp_strip_all_tags($parsed['title']), 60),

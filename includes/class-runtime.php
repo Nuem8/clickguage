@@ -17,9 +17,9 @@ class Clickgauge_Runtime {
     public static function status_text() {
         $limit = self::time_limit();
         if ($limit === 0) {
-            return __('PHP is not set to stop requests on this site.', 'wp-clickgauge');
+            return __('PHP is not set to stop requests on this site.', 'clickguage');
         }
-        return sprintf(__('PHP stops requests on this site after %d seconds.', 'wp-clickgauge'), $limit);
+        return sprintf(__('PHP stops requests on this site after %d seconds.', 'clickguage'), $limit);
     }
 
     public static function warning_text() {
@@ -28,9 +28,9 @@ class Clickgauge_Runtime {
             return '';
         }
         if ($limit < 60) {
-            return sprintf(__('PHP stops this site after %d seconds. A Clickgauge scan can be cut off before it finishes. Auto-apply makes that more likely.', 'wp-clickgauge'), $limit);
+            return sprintf(__('PHP stops this site after %d seconds. A Clickgauge scan can be cut off before it finishes. Auto-apply makes that more likely.', 'clickguage'), $limit);
         }
-        return sprintf(__('PHP stops this site after %d seconds. A normal scan usually finishes. Auto-apply of several drafts can still be cut off.', 'wp-clickgauge'), $limit);
+        return sprintf(__('PHP stops this site after %d seconds. A normal scan usually finishes. Auto-apply of several drafts can still be cut off.', 'clickguage'), $limit);
     }
 
     public static function watch($task) {
@@ -66,21 +66,21 @@ class Clickgauge_Runtime {
             home_url('/'),
             $error['message'],
             self::status_text(),
-            admin_url('admin.php?page=wp-clickgauge-settings&tab=rules')
+            admin_url('admin.php?page=clickguage-settings&tab=rules')
         );
         wp_mail($admin, $subject, $body);
     }
 
     private static function task_label() {
         if (self::$task === 'scan') {
-            return __('a scan', 'wp-clickgauge');
+            return __('a scan', 'clickguage');
         }
         if (self::$task === 'draft') {
-            return __('a snippet draft', 'wp-clickgauge');
+            return __('a snippet draft', 'clickguage');
         }
         if (self::$task === 'recheck') {
-            return __('a Search Console recheck', 'wp-clickgauge');
+            return __('a Search Console recheck', 'clickguage');
         }
-        return __('a Clickgauge request', 'wp-clickgauge');
+        return __('a Clickgauge request', 'clickguage');
     }
 }

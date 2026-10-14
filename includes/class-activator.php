@@ -9,7 +9,7 @@ class Clickgauge_Activator {
     public static function activate() {
         global $wpdb;
 
-        $table = $wpdb->prefix . 'wp_clickgauge_experiments';
+        $table = $wpdb->prefix . 'clickguage_experiments';
         $charset = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE {$table} (
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -39,18 +39,18 @@ class Clickgauge_Activator {
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta($sql);
 
-        if (!get_option('wp_clickgauge_indexnow_key')) {
-            add_option('wp_clickgauge_indexnow_key', wp_generate_password(32, false), '', false);
+        if (!get_option('clickguage_indexnow_key')) {
+            add_option('clickguage_indexnow_key', wp_generate_password(32, false), '', false);
         }
-        if (!get_option('wp_clickgauge_google_token')) {
-            add_option('wp_clickgauge_google_token', array(), '', false);
+        if (!get_option('clickguage_google_token')) {
+            add_option('clickguage_google_token', array(), '', false);
         }
-        if (!wp_next_scheduled('wp_clickgauge_recheck')) {
-            wp_schedule_event(time() + HOUR_IN_SECONDS, 'daily', 'wp_clickgauge_recheck');
+        if (!wp_next_scheduled('clickguage_recheck')) {
+            wp_schedule_event(time() + HOUR_IN_SECONDS, 'daily', 'clickguage_recheck');
         }
     }
 
     public static function deactivate() {
-        wp_clear_scheduled_hook('wp_clickgauge_recheck');
+        wp_clear_scheduled_hook('clickguage_recheck');
     }
 }
